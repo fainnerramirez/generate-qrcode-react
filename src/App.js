@@ -3,10 +3,13 @@ import { useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Qrcode } from "./Qrcode";
+import useGenerateRandomColor from "./components/UseRamdomColor";
 
 function App() {
   const [value, setValue] = useState("");
   const [validationURL, setValidationURL] = useState(false);
+  const { color, generateColor } = useGenerateRandomColor();
+  const [colorAux, setColor] = useState("#000000");
 
   const expression =
     /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/gi;
@@ -19,6 +22,8 @@ function App() {
 
   const handleClick = () => {
     if (value.match(regex)) {
+      setColor(generateColor());
+      console.log("color", color);
       toast.success("QRcode Generado...!", {
         position: toast.POSITION.BOTTOM_CENTER,
         icon: "👌",
@@ -73,7 +78,7 @@ function App() {
           }}
         >
           <h1 style={{ textAlign: "center" }}>Qrcode</h1>
-          <Qrcode value={value} />
+          <Qrcode value={value} color={"#" + color} />
         </div>
       )}
       <ToastContainer />
